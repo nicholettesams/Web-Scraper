@@ -1,10 +1,12 @@
 // Dependencies
 var express = require("express");
-var MongoClient = require("mongodb").MongoClient;
-var request = require("request");
 var cheerio = require("cheerio");
 var axios = require("axios");
 var exphbs = require('express-handlebars');
+var mongoose = require('mongoose'); 
+
+// Bring in schema
+var Aritcle = require("./articleModel.js");
 
 // Initialize Express
 var app = express();
@@ -16,15 +18,8 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
-// Database configuration
-var database = "scraper";
-var collection = "scrapedData";
+mongoose.connect("mongodb://localhost:27017/articles", { useNewUrlParser: true })
 
-MongoClient.connect("mongodb://localhost:27017", function(err, client) {
-  if (err) throw err;
-
-  const db = client.db(database)
-  const scraped = db.collection(collections)
 
   // Main route (simple Hello World Message)
   app.get("/", function(req, res) {
@@ -33,7 +28,7 @@ MongoClient.connect("mongodb://localhost:27017", function(err, client) {
 
   app.get("/all", function(req, res) {
     // Query: In our database, go to the animals collection, then "find" everything
-    scraped.find({}).toArray()
+    Aritcle.find({}).toArray()
     .then(docs => {
       console.log("Documents:" , docs)
       res.json(docs)
@@ -53,29 +48,27 @@ MongoClient.connect("mongodb://localhost:27017", function(err, client) {
       // Load the HTML into cheerio and save it to a variable
       // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
       var $ = cheerio.load(response.data);
-
-      // An empty array to save the data that we'll scrape
-      var results = [];
-
+      
       // With cheerio, find each tag with the "title" class
       $(".title").each(function(i, element) {
 
-        // Save the text of the element in a "title" variable
-        var title = $(element).children('a').text();
-
-        // In the currently selected element, look at its child elements (i.e., its a-tags),
-        // then save the values for any "href" attributes that the child elements may have
-        var link = $(element).children('a').attr("href");
+        var data = {
+          title: $(element).children('a').text(),
+          link: $(element).children('a').attr("href")
+        };
 
         // Save these results in mongodb
         if (title & link){
-          scraped.insert({
-            title,
-            link
-          }, function(err, result) {
-              if (err) throw err;
 
+          Article.create(data)
+          .then(function(dbExample) {
+            // If saved successfully, print the new Example document to the console
+            console.log(dbExample);
           })
+          .catch(function(err) {
+            // If an error occurs, log the error message
+            console.log(err.message);
+          });
 
         }
 
@@ -91,4 +84,3 @@ MongoClient.connect("mongodb://localhost:27017", function(err, client) {
     console.log("App running on port " + PORT);
   });
 
-});
