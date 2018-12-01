@@ -6,7 +6,8 @@ var exphbs = require('express-handlebars');
 var mongoose = require('mongoose'); 
 
 // Bring in schema
-var Aritcle = require("./articleModel.js");
+var Aritcle = require(".models/articleModel.js");
+var Comment = require(".models/commentModel.js");
 
 // Initialize Express
 var app = express();

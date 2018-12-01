@@ -19,7 +19,16 @@ var AritcleSchema = new Schema({
   createdDate: {
     type: Date,
     default: Date.now
-  }
+  },
+  // `comments` is an array that stores ObjectIds
+  // The ref property links these ObjectIds to the comment model
+  // This allows us to populate the article with any associated comments
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment"
+    }
+  ]
 });
 
 // This creates our model from the above schema, using mongoose's model method
