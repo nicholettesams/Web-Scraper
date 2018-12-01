@@ -5,13 +5,19 @@ var axios = require("axios");
 var exphbs = require('express-handlebars');
 var mongoose = require('mongoose'); 
 
-// Bring in schema
-var Aritcle = require(".models/articleModel.js");
-var Comment = require(".models/commentModel.js");
+// Require all models
+var db = require("./models");
 
 // Initialize Express
 var app = express();
-app.use(express.static(process.cwd() + "/public"));
+
+// Use morgan logger for logging requests
+app.use(logger("dev"));
+// Parse request body as JSON
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+// Make public a static folder
+app.use(express.static("public"));
 
 // Initialize Handlebars
 app.engine('handlebars', exphbs({
@@ -22,66 +28,66 @@ app.set('view engine', 'handlebars');
 mongoose.connect("mongodb://localhost:27017/articles", { useNewUrlParser: true })
 
 
-  // Main route (simple Hello World Message)
-  app.get("/", function(req, res) {
-    res.send("Hello world");
-  });
+// ROUTES
 
-  app.get("/all", function(req, res) {
-    // Query: In our database, go to the animals collection, then "find" everything
-    Aritcle.find({}).toArray()
-    .then(docs => {
-      console.log("Documents:" , docs)
-      res.json(docs)
-    })
-    .catch(err => {
-      console.error(err)
-      res.send("Something went wrong!")
-    })
-  
-  });
+app.get("/articles", function(req, res) {
+  // Query: In our database, go to the animals collection, then "find" everything
+  db.Aritcle.find({}).toArray()
+  .then(docs => {
+    console.log("Documents:" , docs)
+    res.json(docs)
+  })
+  .catch(err => {
+    console.error(err)
+    res.send("Something went wrong!")
+  })
 
-  app.get("/scrape", function(req, res){
+});
 
-    axios.get("https://news.ycombinator.com/")
-    .then(function(response) {
+app.get("/scrape", function(req, res){
 
-      // Load the HTML into cheerio and save it to a variable
-      // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
-      var $ = cheerio.load(response.data);
-      
-      // With cheerio, find each tag with the "title" class
-      $(".title").each(function(i, element) {
+  axios.get("https://news.ycombinator.com/")
+  .then(function(response) {
 
-        var data = {
-          title: $(element).children('a').text(),
-          link: $(element).children('a').attr("href")
-        };
+    // Load the HTML into cheerio and save it to a variable
+    // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+    var $ = cheerio.load(response.data);
+    
+    // With cheerio, find each tag with the "title" class
+    $(".title").each(function(i, element) {
 
-        // Save these results in mongodb
-        if (title & link){
+      var data = {
+        title: $(element).children('a').text(),
+        link: $(element).children('a').attr("href")
+      };
 
-          Article.create(data)
-          .then(function(dbExample) {
-            // If saved successfully, print the new Example document to the console
-            console.log(dbExample);
-          })
-          .catch(function(err) {
-            // If an error occurs, log the error message
-            console.log(err.message);
-          });
+      // Save these results in mongodb
+      if (title & link){
 
-        }
+        db.Article.create(data)
+        .then(function(dbArticle) {
+          // If saved successfully, print the new Example document to the console
+          console.log(dbArticle);
+        })
+        .catch(function(err) {
+          // If an error occurs, log the error message
+          console.log(err.message);
+        });
 
-      });
+      }
 
-    })
+    });
+
+    // Send a message to the client
+    res.send("Scrape Complete");
 
   })
 
-  // Setup port
-  var PORT = process.env.PORT || 3000
-  app.listen(PORT, function() {
-    console.log("App running on port " + PORT);
-  });
+})
+
+// Setup port
+var PORT = process.env.PORT || 3000
+app.listen(PORT, function() {
+  console.log("App running on port " + PORT);
+});
 
