@@ -4,7 +4,7 @@ var mongoose = require("mongoose");
 // Get a reference to the mongoose Schema constructor
 var Schema = mongoose.Schema;
 
-var AritcleSchema = new Schema({
+var ArticleSchema = new Schema({
  title: {
     type: String,
     trim: true,
@@ -32,7 +32,7 @@ var AritcleSchema = new Schema({
 });
 
 // This creates our model from the above schema, using mongoose's model method
-var Aritcle = mongoose.model("Aritcle", AritcleSchema);
+var Article = mongoose.model("Article", ArticleSchema);
 
 // Export the Example model
-module.exports = Aritcle;
+module.exports = Article;
