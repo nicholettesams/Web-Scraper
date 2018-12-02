@@ -26,6 +26,7 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
+//TODO: will need to host this on heroku eventually
 mongoose.connect("mongodb://localhost:27017/articles", { useNewUrlParser: true })
 
 
@@ -63,7 +64,7 @@ app.get("/scrape", function(req, res){
       };
 
       // Save these results in mongodb
-      if (title & link){
+      if (data.title & data.link){
 
         db.Article.create(data)
         .then(function(dbArticle) {
@@ -87,33 +88,33 @@ app.get("/scrape", function(req, res){
 })
 
 
-// Route for grabbing a specific Article by id, populate it with it's note
-app.get("/articles/:id", function(req, res) {
+// Route for grabbing a specific Article by id, populate it with it's comment
+// app.get("/articles/:id", function(req, res) {
 
-  db.Article.findOne({ _id: req.params.id})
-  .populate("note") //the key in the article schema
-  .then(function(dbArticle) {
-    res.json(dbArticle)
-  })
-  .catch(function(err) {
-      res.json(err)
-  })
-});
+//   db.Article.findOne({ _id: req.params.id})
+//   .populate("comment") //the key in the article schema
+//   .then(function(dbArticle) {
+//     res.json(dbArticle)
+//   })
+//   .catch(function(err) {
+//       res.json(err)
+//   })
+// });
 
 // Route for saving/updating an Article's associated Comment
-app.post("/articles/:id", function(req, res) {
-  db.Comment.create(req.body)
-  .then(function(dbComment) {
-    return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbComment._id }, { new: true })
-  })
-  .then(function(dbArticle){
-    res.json(dbArticle)
-  })
-  .catch(function(err) { 
-    // If an error occurred, log it
-    console.log(err);
-  });
-});
+// app.post("/articles/:id", function(req, res) {
+//   db.Comment.create(req.body)
+//   .then(function(dbComment) {
+//     return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, { new: true })
+//   })
+//   .then(function(dbArticle){
+//     res.json(dbArticle)
+//   })
+//   .catch(function(err) { 
+//     // If an error occurred, log it
+//     console.log(err);
+//   });
+// });
 
 // Setup port
 var PORT = process.env.PORT || 3000
