@@ -103,6 +103,19 @@ app.get("/scrape", function(req, res){
 
 })
 
+//clear articles
+app.get('/clearAll', function(req, res) {
+  db.Article.deleteMany({}, function(err, doc) {
+      if (err) {
+          console.log(err);
+      } else {
+          console.log('articles removed');
+      }
+
+  });
+  res.render("index")
+});
+
 
 // Route for grabbing a specific Article by id, populate it with it's comment
 // app.get("/articles/:id", function(req, res) {
