@@ -32,23 +32,21 @@ mongoose.connect("mongodb://localhost:27017/articles", { useNewUrlParser: true }
 
 // ROUTES
 
+// Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
-  // Query: In our database, go to the animals collection, then "find" everything
-  db.Aritcle.find({}).toArray()
-  .then(docs => {
-    console.log("Documents:" , docs)
-    res.json(docs)
-  })
-  .catch(err => {
-    console.error(err)
-    res.send("Something went wrong!")
-  })
 
+  db.Article.find({})
+    .then(function(dbArticle) {
+      res.json(dbArticle)
+    })
+    .catch(function(err) {
+        res.json(err)
+    })
 });
 
 app.get("/scrape", function(req, res){
 
-  axios.get("https://news.ycombinator.com/")
+  axios.get("https://www.npr.org/sections/technology/")
   .then(function(response) {
 
     // Load the HTML into cheerio and save it to a variable
@@ -63,12 +61,27 @@ app.get("/scrape", function(req, res){
         link: $(element).children('a').attr("href")
       };
 
-      // Save these results in mongodb
-      if (data.title & data.link){
+      console.log(data)
 
+      // Save these results in mongodb
+      if (data.title && data.link){
+
+        //TODO: figure out how to only "create" if the title is not already there
+        // dbArticle.findOne({ title: data.title })
+        // .then(function (title) {
+        //     if (title==null) {
+        //        //allow create to happen
+        //     }
+        //     else {
+        //        //do not allow create to happen
+        //     }
+        // })
+
+        console.log("before the save")
         db.Article.create(data)
         .then(function(dbArticle) {
-          // If saved successfully, print the new Example document to the console
+          // If saved successfully, print the new Article document to the console
+          console.log("saved")
           console.log(dbArticle);
         })
         .catch(function(err) {
