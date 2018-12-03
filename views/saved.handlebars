@@ -6,7 +6,7 @@
            <a href="{{this.link}}" class="card-title" target="_blank"><h4>{{this.title}}</h4></a>
            <p>{{this.summary}}</p>
             <form method="POST" action="/remove/{{this._id}}?_method=PUT">
-                <button type="button" class="btn btn-default" id="Comment" data-toggle="modal" data-target="#CommentModal{{this._id}}">Add Comment</button>
+                <button type="button" class="btn btn-default" id="AddComment" data-toggle="modal" data-target="#CommentModal{{this._id}}">Add Comment</button>
                 <button type="submit" class="btn btn-default" id="RemoveSaved">Remove Saved</button>
             </form>
             
@@ -16,15 +16,23 @@
   </div>
 
   {{#each article}}
-  <div class="modal fade" id="CommentModal{{this._id}}" role="dialog">
-      <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"></button>
-            <h4 class="modal-title">Add a Comment</h4>
-            </div>
-        </div>
-      </div>
+  <!-- The Modal (taken from w2schools)-->
+<div id="myModal" class="modal">
 
+  <!-- Modal content -->
+  <div id="commentModal{{this._id}}" class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <h2>Modal Header</h2>
+    </div>
+    <div class="modal-body">
+      <p>Some text in the Modal Body</p>
+      <p>Some other text...</p>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-default">Save</button>
+    </div>
   </div>
+
+</div>
   {{/each}}
