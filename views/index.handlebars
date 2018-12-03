@@ -1,9 +1,11 @@
 <h3>Articles</h3>
 <div>
     {{#each article}}
-      <div class="card-panel">
-        <h4>{{this.title}}</h4>
-        <h4>{{this.link}}</h4>
+      <div class="card">
+        <div class = "card-body">
+            <h4 class="card-title">{{this.title}}</h4>
+            <a href="{{this.link}}" class="card-link" target="_blank">Link to Article</a>
+        </div>
       </div>
     {{/each}}
   </div>

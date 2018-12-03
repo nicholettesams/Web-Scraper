@@ -52,7 +52,7 @@ app.get("/scrape", function(req, res){
     // Load the HTML into cheerio and save it to a variable
     // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
     var $ = cheerio.load(response.data);
-    
+  
     // With cheerio, find each tag with the "title" class
     $(".title").each(function(i, element) {
 
@@ -66,26 +66,12 @@ app.get("/scrape", function(req, res){
       // Save these results in mongodb
       if (data.title && data.link){
 
-        //TODO: figure out how to only "create" if the title is not already there
-        // dbArticle.findOne({ title: data.title })
-        // .then(function (title) {
-        //     if (title==null) {
-        //        //allow create to happen
-        //     }
-        //     else {
-        //        //do not allow create to happen
-        //     }
-        // })
-
-        console.log("before the save")
-        db.Article.create(data)
+        //UpdateOne (update was deprecated) with upsert instead of create so that it will 
+        //only be created if the article doesn't already exist
+        db.Article.updateOne({title: data.title}, {$set: data}, {upsert: true})
         .then(function(dbArticle) {
           // If saved successfully, print the new Article document to the console
-          console.log("saved")
           console.log(dbArticle);
-
-            res.render("index", {article: data})
-          
         })
         .catch(function(err) {
           // If an error occurs, log the error message
@@ -98,6 +84,20 @@ app.get("/scrape", function(req, res){
 
     // Send a message to the client
     //res.send("Scrape Complete");
+    
+
+  })
+  .then(function(){
+       // sends each article to the front end to be rendered once all articles are saved to the db
+       db.Article.find()
+       .then(articles => {
+         //res.json(articles);
+         res.render("index", {article: articles})
+       })
+       .catch(function(err) {
+        // If an error occurs, log the error message
+        console.log(err.message);
+      });
 
   })
 
