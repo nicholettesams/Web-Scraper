@@ -32,7 +32,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
 
 // ROUTES
 
-// Route for getting all Articles from the db
+// Route for getting all Articles from the db, returned as JSON
 app.get("/articles-json", function(req, res) {
 
   db.Article.find()
@@ -44,6 +44,7 @@ app.get("/articles-json", function(req, res) {
     })
 });
 
+// Route for getting all unsaved articles and calling index page
 app.get("/articles", function(req, res) {
 
   db.Article.find({saved: false})
@@ -56,6 +57,7 @@ app.get("/articles", function(req, res) {
       });
 });
 
+// Route for scraping articles and then calling index page to display all unsaved articles
 app.get("/scrape", function(req, res){
 
   axios.get("https://www.npr.org/sections/technology/")
@@ -72,7 +74,6 @@ app.get("/scrape", function(req, res){
         title: $(element).children('h2').text(),
         link: $(element).children('h2').children('a').attr("href"),
         summary: $(element).children('p').text(),
-        saved: false
       };
 
       console.log(data)
@@ -96,14 +97,11 @@ app.get("/scrape", function(req, res){
 
     });
 
-    // Send a message to the client
-    //res.send("Scrape Complete");
-    
 
   })
   .then(function(){
-       // gets all articles from database and sends them to handlebars page
-       db.Article.find()
+       // gets all unsaved articles from database and sends them to handlebars page
+       db.Article.find({saved: false})
        .then(articles => {
          res.render("index", {article: articles})
        })
