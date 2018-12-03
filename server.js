@@ -131,34 +131,6 @@ app.get('/clearAll', function(req, res) {
 });
 
 
-// Route for grabbing a specific Article by id, populate it with it's comment
-// app.get("/articles/:id", function(req, res) {
-
-//   db.Article.findOne({ _id: req.params.id})
-//   .populate("comment") //the key in the article schema
-//   .then(function(dbArticle) {
-//     res.json(dbArticle)
-//   })
-//   .catch(function(err) {
-//       res.json(err)
-//   })
-// });
-
-// Route for saving/updating an Article's associated Comment
-// app.post("/articles/:id", function(req, res) {
-//   db.Comment.create(req.body)
-//   .then(function(dbComment) {
-//     return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, { new: true })
-//   })
-//   .then(function(dbArticle){
-//     res.json(dbArticle)
-//   })
-//   .catch(function(err) { 
-//     // If an error occurred, log it
-//     console.log(err);
-//   });
-// });
-
 // Route for saving the article
 app.post("/saved/:id", function(req, res) {
   // res.redirect("/")
@@ -203,8 +175,39 @@ app.get('/saved', function(req, res) {
 });
 
 
+// Routes for Comments
 
-// HTML Route for home page with no articles
+// Route for grabbing a specific Article by id, populate it with it's comment
+app.get("/articles/:id", function(req, res) {
+
+  db.Article.findOne({ _id: req.params.id})
+  .populate("comment") //the key in the article schema
+  .then(function(dbArticle) {
+    res.json(dbArticle)
+  })
+  .catch(function(err) {
+      res.json(err)
+  })
+});
+
+// Route for saving/updating an Article's associated Comment
+app.post("/articles/:id", function(req, res) {
+  db.Comment.create(req.body)
+  .then(function(dbComment) {
+    return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, { new: true })
+  })
+  .then(function(dbArticle){
+    res.json(dbArticle)
+  })
+  .catch(function(err) { 
+    // If an error occurred, log it
+    console.log(err);
+  });
+});
+
+
+
+// HTML Route for home page
 app.get('/', function(req, res) {
   res.redirect("/articles")
 });
