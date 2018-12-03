@@ -15,6 +15,10 @@ var ArticleSchema = new Schema({
     trim: true,
     required: "Link is Required"
   },
+  saved: {
+    type: Boolean,
+    default: false
+  },
   // `date` must be of type Date. The default value is the current date
   createdDate: {
     type: Date,
