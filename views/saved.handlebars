@@ -1,0 +1,14 @@
+<h3>Saved Articles</h3>
+<div>
+    {{#each article}}
+      <div class="card">
+        <div class = "card-body">
+           <a href="{{this.link}}" class="card-title" target="_blank"><h4>{{this.title}}</h4></a>
+            <form method="POST" action="/remove/{{this._id}}?_method=PUT">
+                <button type="submit" class="btn btn-default" id="RemoveSaved">Remove Saved</button>
+            </form>
+            <button type="submit" class="btn btn-default" id="Comment">Comment</button>
+        </div>
+      </div>
+    {{/each}}
+  </div>

@@ -33,15 +33,27 @@ mongoose.connect("mongodb://localhost:27017/articles", { useNewUrlParser: true }
 // ROUTES
 
 // Route for getting all Articles from the db
-app.get("/articles", function(req, res) {
+app.get("/articles-json", function(req, res) {
 
-  db.Article.find({})
+  db.Article.find()
     .then(function(dbArticle) {
       res.json(dbArticle)
     })
     .catch(function(err) {
         res.json(err)
     })
+});
+
+app.get("/articles", function(req, res) {
+
+  db.Article.find({saved: false})
+       .then(articles => {
+         res.render("index", {article: articles})
+       })
+       .catch(function(err) {
+        // If an error occurs, log the error message
+        console.log(err.message);
+      });
 });
 
 app.get("/scrape", function(req, res){
@@ -58,7 +70,8 @@ app.get("/scrape", function(req, res){
 
       var data = {
         title: $(element).children('a').text(),
-        link: $(element).children('a').attr("href")
+        link: $(element).children('a').attr("href"),
+        saved: false
       };
 
       console.log(data)
@@ -145,14 +158,42 @@ app.get('/clearAll', function(req, res) {
 //   });
 // });
 
+// Route for saving the article
+app.post("/saved/:id", function(req, res) {
+  // res.redirect("/")
+  console.log(req.params.id)
+  db.Article.updateOne({_id: req.params.id}, {$set: {saved: true}}, function(err, doc) {
+    if (err) {
+      res.send(err);
+    }
+    else {
+      console.log("article is saved")
+      res.redirect("/articles")
+    }
+  });
+});
 
-// TODO: Route for saved articles
-// right now this returns all articles in the database
+// Route for removing saved articles
+app.post("/remove/:id", function(req, res) {
+
+  console.log(req.params.id)
+  db.Article.updateOne({_id: req.params.id}, {$set: {saved: false}}, function(err, doc) {
+    if (err) {
+      res.send(err);
+    }
+    else {
+      console.log("article is no longer saved")
+      res.redirect("/saved")
+    }
+  });
+});
+
+// Gets saved articles and calls saved handlebars page
 app.get('/saved', function(req, res) {
-  // using deleteMany because remove was depricated
-  db.Article.find()
+
+  db.Article.find({saved: true})
        .then(articles => {
-         res.render("index", {article: articles})
+         res.render("saved", {article: articles})
        })
        .catch(function(err) {
         // If an error occurs, log the error message
@@ -160,9 +201,11 @@ app.get('/saved', function(req, res) {
       });
 });
 
+
+
 // HTML Route for home page with no articles
 app.get('/', function(req, res) {
-  res.render("index")
+  res.redirect("/articles")
 });
 
 // Setup port
