@@ -27,8 +27,8 @@ app.engine('handlebars', exphbs({
 app.set('view engine', 'handlebars');
 
 //TODO: will need to host this on heroku eventually
-mongoose.connect("mongodb://localhost:27017/articles", { useNewUrlParser: true })
-
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/articles";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
 
 // ROUTES
 
