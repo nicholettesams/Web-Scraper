@@ -10,6 +10,10 @@ var ArticleSchema = new Schema({
     trim: true,
     required: "Title is Required"
   },
+ summary: {
+    type: String,
+    trim: true,
+ },
  link: {
     type: String,
     trim: true,

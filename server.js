@@ -66,11 +66,12 @@ app.get("/scrape", function(req, res){
     var $ = cheerio.load(response.data);
   
     // With cheerio, find each tag with the "title" class
-    $(".title").each(function(i, element) {
+    $(".item-info").each(function(i, element) {
 
       var data = {
-        title: $(element).children('a').text(),
-        link: $(element).children('a').attr("href"),
+        title: $(element).children('h2').text(),
+        link: $(element).children('h2').children('a').attr("href"),
+        summary: $(element).children('p').text(),
         saved: false
       };
 
