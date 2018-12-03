@@ -83,6 +83,9 @@ app.get("/scrape", function(req, res){
           // If saved successfully, print the new Article document to the console
           console.log("saved")
           console.log(dbArticle);
+
+            res.render("index", {article: data})
+          
         })
         .catch(function(err) {
           // If an error occurs, log the error message
@@ -94,7 +97,7 @@ app.get("/scrape", function(req, res){
     });
 
     // Send a message to the client
-    res.send("Scrape Complete");
+    //res.send("Scrape Complete");
 
   })
 
