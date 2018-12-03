@@ -88,10 +88,9 @@ app.get("/scrape", function(req, res){
 
   })
   .then(function(){
-       // sends each article to the front end to be rendered once all articles are saved to the db
+       // gets all articles from database and sends them to handlebars page
        db.Article.find()
        .then(articles => {
-         //res.json(articles);
          res.render("index", {article: articles})
        })
        .catch(function(err) {
@@ -105,6 +104,7 @@ app.get("/scrape", function(req, res){
 
 //clear articles
 app.get('/clearAll', function(req, res) {
+  // using deleteMany because remove was depricated
   db.Article.deleteMany({}, function(err, doc) {
       if (err) {
           console.log(err);
@@ -144,6 +144,26 @@ app.get('/clearAll', function(req, res) {
 //     console.log(err);
 //   });
 // });
+
+
+// TODO: Route for saved articles
+// right now this returns all articles in the database
+app.get('/saved', function(req, res) {
+  // using deleteMany because remove was depricated
+  db.Article.find()
+       .then(articles => {
+         res.render("index", {article: articles})
+       })
+       .catch(function(err) {
+        // If an error occurs, log the error message
+        console.log(err.message);
+      });
+});
+
+// HTML Route for home page with no articles
+app.get('/', function(req, res) {
+  res.render("index")
+});
 
 // Setup port
 var PORT = process.env.PORT || 3000
