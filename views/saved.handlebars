@@ -6,7 +6,7 @@
            <a href="{{this.link}}" class="card-title" target="_blank"><h4>{{this.title}}</h4></a>
            <p>{{this.summary}}</p>
             <form method="POST" action="/remove/{{this._id}}?_method=PUT">
-                <button type="button" class="btn btn-default" id="AddComment" data-toggle="modal" data-target="#CommentModal{{this._id}}">Add Comment</button>
+                <button type="button" class="btn btn-default addComment" id="AddComment" data-toggle="modal" data-target="#CommentModal{{this._id}}">Add Comment</button>
                 <button type="submit" class="btn btn-default" id="RemoveSaved">Remove Saved</button>
             </form>
             
@@ -17,20 +17,28 @@
 
   {{#each article}}
   <!-- The Modal (taken from w2schools)-->
-<div id="myModal" class="modal">
+<div id="myModal" commentID="{{this._id}}" class="modal">
 
   <!-- Modal content -->
-  <div id="commentModal{{this._id}}" class="modal-content">
+  <div id="commentModal" class="modal-content">
     <div class="modal-header">
+      <h2>Comments</h2>
       <span class="close">&times;</span>
-      <h2>Modal Header</h2>
+      
     </div>
     <div class="modal-body">
-      <p>Some text in the Modal Body</p>
-      <p>Some other text...</p>
+      <form class="navbar-form navbar-left" action="/saved/notes/{{this.id}}" method="POST">
+            <div class="form-group">
+              <label for="commentTitle">Title</label>  
+              <input type="text" name="commentTitle" placeholder="Title"><br>
+              <label for="commentMessage">Notes</label>
+              <textarea class="form-control" rows="4" id="commentMessage" name="message" placeholder="Comments"></textarea>
+            </div>
+            <button type="submit" class="btn btn-default">Save</button>
+          </form>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-default">Save</button>
+      
     </div>
   </div>
 

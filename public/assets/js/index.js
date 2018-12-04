@@ -1,3 +1,7 @@
+//TODO: need to figure out how to get the specific article add comment that 
+//was clicked on and display comments for that artcile
+
+
 // Get the modal
 var modal = document.getElementById("myModal");
 
