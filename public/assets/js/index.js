@@ -1,7 +1,5 @@
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal 
+// When the user clicks the button, open the modal for the
+// article we clicked on
 $(document).on("click", ".add-comment", function() {
     console.log("Add comment clicked")
 
@@ -15,8 +13,10 @@ $(document).on("click", ".add-comment", function() {
     modal.style.display = "block";
 })
 
-// When the user clicks on <span> (x), close the modal
+// When the user clicks on <span> (x), close the modal 
+// for the article that is open.
 $(document).on("click", ".close", function() {
+    console.log("close clicked")
 
     var articleID = $(this).attr("articleid")
     console.log(articleID)

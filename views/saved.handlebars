@@ -16,7 +16,6 @@
   </div>
 
   {{#each article}}
-  <!-- The Modal (taken from w2schools)-->
 <div id="myModal{{this._id}}" class="modal">
 
   <!-- Modal content -->
@@ -26,6 +25,10 @@
       <span id="close" articleid={{this._id}} class="close">&times;</span>
       
     </div>
+    <div class="commentSaved" class="modal-content">
+        <!-- TODO: figure out how to load modal with existing comments -->
+    </div>
+
     <div class="modal-body">
       <form class="navbar-form navbar-left" action="/articlenotes/{{this.id}}" method="POST">
             <div class="form-group">
