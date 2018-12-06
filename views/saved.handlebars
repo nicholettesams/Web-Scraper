@@ -30,11 +30,11 @@
       <form class="navbar-form navbar-left" action="/saved/notes/{{this.id}}" method="POST">
             <div class="form-group">
               <label for="commentTitle">Title</label>  
-              <input type="text" name="commentTitle" placeholder="Title"><br>
+              <input id="titleinput" type="text" name="commentTitle" placeholder="Title"><br>
               <label for="commentMessage">Notes</label>
-              <textarea class="form-control" rows="4" id="commentMessage" name="message" placeholder="Comments"></textarea>
+              <textarea id="bodyinput" class="form-control" rows="4" id="commentMessage" name="message" placeholder="Comments"></textarea>
             </div>
-            <button type="submit" class="btn btn-default">Save</button>
+            <button id="savenote" type="submit" class="btn btn-default">Save</button>
           </form>
     </div>
     <div class="modal-footer">
