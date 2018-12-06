@@ -47,7 +47,7 @@ app.get("/articles-json", function(req, res) {
 // Route for getting all unsaved articles and calling index page
 app.get("/articles", function(req, res) {
 
-  db.Article.find({saved: false})
+  db.Article.find({saved: false}).sort( {"_id": -1}).limit(100)
        .then(articles => {
          res.render("index", {article: articles})
        })
@@ -83,7 +83,7 @@ app.get("/scrape", function(req, res){
 
         //UpdateOne (update was deprecated) with upsert instead of create so that it will 
         //only be created if the article doesn't already exist
-        db.Article.updateOne({title: data.title}, {$set: data}, {upsert: true})
+        db.Article.updateOne({title: data.title}, {$set: data, $setOnInsert: {saved: false}}, {upsert: true})
         .then(function(dbArticle) {
           // If saved successfully, print the new Article document to the console
           console.log(dbArticle);
