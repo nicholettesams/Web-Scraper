@@ -189,13 +189,16 @@ app.get("/articles/:id", function(req, res) {
 });
 
 // Route for saving/updating an Article's associated Comment
-app.post("/articles/:id", function(req, res) {
+app.post("/articlenotes/:id", function(req, res) {
+  console.log(req.body)
   db.Comment.create(req.body)
+  
   .then(function(dbComment) {
     return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, { new: true })
   })
   .then(function(dbArticle){
-    res.json(dbArticle)
+    //res.json(dbArticle)
+    res.redirect("/saved")
   })
   .catch(function(err) { 
     // If an error occurred, log it
