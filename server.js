@@ -162,7 +162,7 @@ app.post("/remove/:id", function(req, res) {
 // Gets saved articles and calls saved handlebars page
 app.get('/saved', function(req, res) {
 
-  db.Article.find({saved: true})
+  db.Article.find({saved: true}).sort( {"_id": -1})
        .then(articles => {
          res.render("saved", {article: articles})
        })
