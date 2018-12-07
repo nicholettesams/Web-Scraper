@@ -162,9 +162,10 @@ app.post("/remove/:id", function(req, res) {
 // Gets saved articles and calls saved handlebars page
 app.get('/saved', function(req, res) {
 
-  db.Article.find({saved: true}).sort( {"_id": -1})
+  db.Article.find({saved: true}).sort( {"_id": -1}).populate("comment", 'body')
        .then(articles => {
-         res.render("saved", {article: articles})
+          console.log(articles) 
+          res.render("saved", {article: articles})
        })
        .catch(function(err) {
         // If an error occurs, log the error message
@@ -190,14 +191,13 @@ app.get("/articles/:id", function(req, res) {
 
 // Route for saving/updating an Article's associated Comment
 app.post("/articlenotes/:id", function(req, res) {
-  console.log(req.body)
+  // Insert Comments into database
   db.Comment.create(req.body)
-  
   .then(function(dbComment) {
-    return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, { new: true })
+    // Update Artcile document with Comment ID
+    return db.Article.findOneAndUpdate({ _id: req.params.id }, { comments: dbComment._id }, { new: true })
   })
   .then(function(dbArticle){
-    //res.json(dbArticle)
     res.redirect("/saved")
   })
   .catch(function(err) { 
