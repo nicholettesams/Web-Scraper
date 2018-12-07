@@ -26,9 +26,16 @@
       
     </div>
     <div class="commentSaved" class="modal-content">
-        <!-- TODO: figure out how to load modal with existing comments -->
+        <!-- existing comments -->
+        {{#each this.comments}}
+            <h3>{{this.title}}</h3> 
+            <h4>{{this.message}}</h4>
+            <form method="POST" action="/remove/comment/{{this._id}}?_method=PUT"></form>
+            <button type="submit" class="btn btn-danger" id="RemoveComment">Remove Comment</button>
+         {{/each}}
+        
     </div>
-
+    <hr>
     <div class="modal-body">
       <form class="navbar-form navbar-left" action="/articlenotes/{{this.id}}" method="POST">
             <div class="form-group">
