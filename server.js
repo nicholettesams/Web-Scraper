@@ -76,8 +76,6 @@ app.get("/scrape", function(req, res){
         summary: $(element).children('p').text(),
       };
 
-      console.log(data)
-
       // Save these results in mongodb
       if (data.title && data.link){
 
@@ -86,7 +84,7 @@ app.get("/scrape", function(req, res){
         db.Article.updateOne({title: data.title}, {$set: data, $setOnInsert: {saved: false}}, {upsert: true})
         .then(function(dbArticle) {
           // If saved successfully, print the new Article document to the console
-          console.log(dbArticle);
+          console.log("Articles sraped");
         })
         .catch(function(err) {
           // If an error occurs, log the error message
@@ -121,7 +119,7 @@ app.get('/clearAll', function(req, res) {
       if (err) {
           console.log(err);
       } else {
-          console.log('articles removed');
+          console.log('Articles removed');
       }
 
   });
@@ -131,14 +129,13 @@ app.get('/clearAll', function(req, res) {
 
 // Route for saving the article
 app.post("/saved/:id", function(req, res) {
-  // res.redirect("/")
-  console.log(req.params.id)
+
   db.Article.updateOne({_id: req.params.id}, {$set: {saved: true}}, function(err, doc) {
     if (err) {
       res.send(err);
     }
     else {
-      console.log("article is saved")
+      console.log("Article is saved")
       res.redirect("/articles")
     }
   });
@@ -147,13 +144,12 @@ app.post("/saved/:id", function(req, res) {
 // Route for removing saved articles
 app.post("/remove/:id", function(req, res) {
 
-  console.log(req.params.id)
   db.Article.updateOne({_id: req.params.id}, {$set: {saved: false}}, function(err, doc) {
     if (err) {
       res.send(err);
     }
     else {
-      console.log("article is no longer saved")
+      console.log("Article is no longer saved")
       res.redirect("/saved")
     }
   });
@@ -162,9 +158,8 @@ app.post("/remove/:id", function(req, res) {
 // Gets saved articles and calls saved handlebars page
 app.get('/saved', function(req, res) {
 
-  db.Article.find({saved: true}).sort( {"_id": -1}).populate("comment", 'body')
+  db.Article.find({saved: true}).sort( {"_id": -1}).populate("comments")
        .then(articles => {
-          console.log(articles) 
           res.render("saved", {article: articles})
        })
        .catch(function(err) {
@@ -203,6 +198,21 @@ app.post("/articlenotes/:id", function(req, res) {
   .catch(function(err) { 
     // If an error occurred, log it
     console.log(err);
+  });
+});
+
+// Route for deleting comments
+app.post("/remove/comment/:id", function(req, res) {
+  console.log("remove comment clicked")
+  console.log(req.params.id)
+  db.Comment.remove({_id: req.params.id}, function(err, doc) {
+    if (err) {
+      res.send(err);
+    }
+    else {
+      console.log("comment deleted")
+      res.redirect("/saved")
+    }
   });
 });
 
