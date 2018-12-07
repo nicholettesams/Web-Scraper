@@ -6,8 +6,8 @@
            <a href="{{this.link}}" class="card-title" target="_blank"><h4>{{this.title}}</h4></a>
            <p>{{this.summary}}</p>
             <form method="POST" action="/remove/{{this._id}}?_method=PUT">
-                <button type="button" class="btn btn-default add-comment" id="AddComment{{this._id}}" articleid="{{this._id}}" class="add-comment">Add Comment</button>
-                <button type="submit" class="btn btn-default" id="RemoveSaved">Remove Saved</button>
+                <button type="button" class="btn btn-success add-comment" id="AddComment{{this._id}}" articleid="{{this._id}}" class="add-comment">Add Comment</button>
+                <button type="submit" class="btn btn-danger" id="RemoveSaved">Remove Saved</button>
             </form>
             
         </div>
@@ -32,12 +32,12 @@
     <div class="modal-body">
       <form class="navbar-form navbar-left" action="/articlenotes/{{this.id}}" method="POST">
             <div class="form-group">
-              <label for="commentTitle">Title</label>  
+              <!-- <label for="commentTitle">Title</label>  -->
               <input id="titleinput" type="text" name="title" placeholder="Title"><br>
-              <label for="commentMessage">Notes</label>
+              <!--<label for="commentMessage">Notes</label> -->
               <textarea id="bodyinput" class="form-control" rows="4" id="commentMessage" name="message" placeholder="Comments"></textarea>
             </div>
-            <button id="savenote" type="submit" class="btn btn-default">Save</button>
+            <button id="savenote" type="submit" class="btn btn-success">Save</button>
           </form>
     </div>
     <div class="modal-footer">
