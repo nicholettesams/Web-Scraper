@@ -14,11 +14,11 @@ HTML, CSS, Bootstrap, JavaScript, MongoDB, Mongoose, Express, Express Handlebars
 
 ## Using the application
 
-Browse to [Heroku](https://web-scraper-sams.herokuapp.com/) to launch the live site.  Click on Scrape New Articles in the navigation bar to insert the article Title, Summary and URL from NPR into the mongodb.  Articles already scraped will remain and will not be overwritten.  Click on Save under any article to save this article.  Saved articles can be viewed by clicking Saved Articles in the navigation bar.  
+Browse to [Heroku](https://web-scraper-sams.herokuapp.com/) to launch the live site.  Click on Scrape New Articles in the navigation bar to insert the article Title, Summary and URL from NPR into the mongodb.  Articles already scraped will remain and will not be overwritten.  Click on Save under any article to save this article.  Saved articles can be viewed by clicking Saved Articles in the navigation bar.  Click on Removed Saved under any article to removed this artcile from the list of saved.  It will then appear back on the Home screen.
 
-Click on Add Comment to add a comment to any saved article.  Click on Removed Saved under any article to removed this artcile from the list of saved.  It will then appear back on the Home screen.
+Click on Add Comment to add a comment to any saved article. You can also view and delete existing comments on this article.  
 
-If you wish to delete everything and start over, click on the Clear Articles button in the navigation bar.
+If you wish to delete all articles and start over, click on the Clear Articles button in the navigation bar.
 
 ### Home Page
 ![Home Page](screenshots/Home.jpg?raw=true "Home Page")
@@ -29,7 +29,5 @@ If you wish to delete everything and start over, click on the Clear Articles but
 ### Adding a Comment
 ![Add Comment Modal](screenshots/AddComment.jpg?raw=true "Add Comment Modal")
 
-## Future Development
 
-There were items of the assignment that I was not able to complete.  The Remove Comment button does not work yet.
 

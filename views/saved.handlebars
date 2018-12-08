@@ -30,8 +30,9 @@
         {{#each this.comments}}
             <h3>{{this.title}}</h3> 
             <h4>{{this.message}}</h4>
-            <form method="POST" action="/remove/comment/{{this._id}}?_method=PUT"></form>
-            <button type="submit" class="btn btn-danger" id="RemoveComment">Remove Comment</button>
+            <form method="POST" action="/remove/comment/{{this._id}}?_method=PUT">
+                <button type="submit" class="btn btn-danger" id="RemoveComment">Remove Comment</button>
+            </form>
          {{/each}}
         
     </div>
