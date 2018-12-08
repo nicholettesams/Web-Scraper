@@ -25,7 +25,10 @@
       <span id="close" articleid={{this._id}} class="close">&times;</span>
       
     </div>
-    <div class="commentSaved" class="modal-content">
+
+    <div class="modal-body">
+
+        <div class="commentSaved" class="modal-content">
         <!-- existing comments -->
         {{#each this.comments}}
             <h3>{{this.title}}</h3> 
@@ -33,12 +36,11 @@
             <form method="POST" action="/remove/comment/{{this._id}}?_method=PUT">
                 <button type="submit" class="btn btn-danger" id="RemoveComment">Remove Comment</button>
             </form>
-         {{/each}}
+            {{/each}}
         
-    </div>
-    <hr>
-    <div class="modal-body">
-      <form class="navbar-form navbar-left" action="/articlenotes/{{this.id}}" method="POST">
+        </div>
+        <hr>
+        <form class="navbar-form navbar-left" action="/articlenotes/{{this.id}}" method="POST">
             <div class="form-group">
               <!-- <label for="commentTitle">Title</label>  -->
               <input id="titleinput" type="text" name="title" placeholder="Title"><br>
@@ -46,7 +48,7 @@
               <textarea id="bodyinput" class="form-control" rows="4" id="commentMessage" name="message" placeholder="Comments"></textarea>
             </div>
             <button id="savenote" type="submit" class="btn btn-success">Save</button>
-          </form>
+        </form>
     </div>
     <div class="modal-footer">
       
