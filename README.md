@@ -31,5 +31,5 @@ If you wish to delete everything and start over, click on the Clear Articles but
 
 ## Future Development
 
-There were items of the assignment that I was not able to complete.  The Remove Comment button does not work yet and adding a new comment overrides existing comments.
+There were items of the assignment that I was not able to complete.  The Remove Comment button does not work yet.
 

@@ -189,8 +189,20 @@ app.post("/articlenotes/:id", function(req, res) {
   // Insert Comments into database
   db.Comment.create(req.body)
   .then(function(dbComment) {
+
     // Update Artcile document with Comment ID
-    return db.Article.findOneAndUpdate({ _id: req.params.id }, { comments: dbComment._id }, { new: true })
+    return db.Article.findOneAndUpdate({ _id: req.params.id }, 
+      {
+          $push: {
+            comments:{
+              $each: [
+                dbComment._id
+              ],
+              $position: 0
+            }
+          }
+      },
+      { upsert: true, new: true })
   })
   .then(function(dbArticle){
     res.redirect("/saved")
