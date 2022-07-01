@@ -21,14 +21,14 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Initialize Handlebars
-app.engine('handlebars', exphbs({
+app.engine('handlebars', exphbs.engine({
   defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
 
 //TODO: will need to host this on heroku eventually
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/articles";
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // ROUTES
 
